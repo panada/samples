@@ -1,0 +1,26 @@
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+.navbar-fixed-top .container, .navbar-fixed-bottom .container, .container, .navbar-fixed-top .container, .navbar-fixed-bottom .container {
+    width: 850px;
+}
+.container > .row > .span5 {
+    width: 450px;
+}
+.container > .row > .span6 {
+    width: 530px;
+    background-color: #FFFFFF;
+}
+#textarea {
+    width: 515px;
+}
+.submit-post {
+    margin-left: 459px;
+}
+.head-profile {
+    margin-bottom:21px;
+}
+.follow-btn {
+    margin-left: 430px;
+}
