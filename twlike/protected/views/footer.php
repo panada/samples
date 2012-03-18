@@ -8,6 +8,9 @@
 <script type="text/javascript">
 $(function(){
     $('.dropdown-toggle').dropdown();
+    $('.nav-signin').click(function(e){
+        e.stopPropagation();
+    });
 });
 </script>
 </div> <!-- /container -->
