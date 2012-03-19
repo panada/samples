@@ -1,6 +1,7 @@
 <?php
 namespace Controllers;
-use Resources;
+use
+    Resources;
 
 class Signout extends Resources\Controller {
     

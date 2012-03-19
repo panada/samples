@@ -1,6 +1,8 @@
 <?php
 namespace Controllers;
-use Resources, Models;
+use
+    Resources,
+    Models;
 
 class Users extends Resources\Controller {
     
@@ -8,10 +10,10 @@ class Users extends Resources\Controller {
         
         parent::__construct();
         
-	$this->session = new Resources\Session;
-        $this->users = new Models\Users;
-	$this->posts = new Models\Posts;
-        $this->pagination = new Resources\Pagination;
+	$this->session	    = new Resources\Session;
+        $this->users	    = new Models\Users;
+	$this->posts	    = new Models\Posts;
+        $this->pagination   = new Resources\Pagination;
     }
     
     public function index($page = 1){
@@ -28,9 +30,9 @@ class Users extends Resources\Controller {
 	$this->pagination->current  = $page;
         $data['users']              = $this->users->getAll( $args );
         $data['pageLinks']          = $this->pagination->getUrl();
-	
 	$data['totalPost']	    = $this->posts->getTotal();
 	$data['totalUser']	    = $this->users->getTotal();
+	$data['signature']	    = $this->libraries->requestSignature()->generate();
         
         $this->output('users', $data);
     }

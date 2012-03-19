@@ -1,6 +1,8 @@
 <?php
 namespace Controllers;
-use Resources, Models;
+use
+    Resources,
+    Models;
 
 class Profile extends Resources\Controller {
     
@@ -60,6 +62,9 @@ class Profile extends Resources\Controller {
         $data['follower']       = $this->connections->getFollower($data['user']->userId);
         $data['totalFollower']  = $this->connections->getTotalFollower($data['user']->userId);
         $data['totalPosts']     = $this->posts->getTotal($data['user']->userId);
+        
+        if( ! $this->userId = $this->session->getValue('userId') )
+            $data['signature']	= $this->libraries->requestSignature()->generate();
         
         $this->output('profile', $data);
     }

@@ -1,6 +1,9 @@
 <?php
 namespace Controllers;
-use Resources, Models;
+use
+    Resources,
+    Models,
+    Libraries;
 
 class Home extends Resources\Controller {
     
@@ -10,24 +13,24 @@ class Home extends Resources\Controller {
         
         parent::__construct();
         
-        $this->session  = new Resources\Session;
-        $this->request  = new Resources\Request;
-        $this->user     = new Models\Users;
-        $this->connections = new Models\Connections;
-        $this->posts = new Models\Posts;
+        $this->session          = new Resources\Session;
+        $this->request          = new Resources\Request;
+        $this->user             = new Models\Users;
+        $this->connections      = new Models\Connections;
+        $this->posts            = new Models\Posts;
+        $this->requestSignature = new Libraries\RequestSignature;
     }
     
     public function index(){
         
+        // Have signed in? bring to dashboard method
         if( $this->userId = $this->session->getValue('userId') ){
             $this->dashboard();
             return;
         }
         
-        if( $_SERVER['REQUEST_METHOD'] == 'GET' )
-            $this->session->setValue( 'postToken', time() );
-        
-        if( $_SERVER['REQUEST_METHOD'] == 'POST' && ! $this->session->getValue( 'postToken' ) ){
+        // Validate the POST request
+        if( $_SERVER['REQUEST_METHOD'] == 'POST' && ! $this->requestSignature->validate( $this->request->post('signature') ) ){
             Resources\Tools::setStatusHeader(400);
             $this->output('errors/400');
             return;
@@ -40,10 +43,14 @@ class Home extends Resources\Controller {
             'loginStyleRegister' => null,
         );
         
+        // Generate signature string to embeded in each HTTP POST request
+        if( $_SERVER['REQUEST_METHOD'] == 'GET' )
+            $data['signature'] = $this->requestSignature->generate();
+        
         // Login process
         if( $this->request->post('submit') ){
             
-            $usrname = $this->request->post('username');
+            $usrname = $this->request->post('username', FILTER_SANITIZE_STRING);
             
             $user = $this->user->getOne( array('username' => $usrname) );
             
@@ -66,7 +73,7 @@ class Home extends Resources\Controller {
             $data['loginStyle'] = 'error';
         }
         
-        
+        // Register process
         if( $this->request->post('register') ){
             if( ! $this->register() ){
                 $data['errorMessageRegister'] = 'Username already exists';
@@ -79,7 +86,7 @@ class Home extends Resources\Controller {
     
     private function register(){
         
-        $usrname = $this->request->post('rUsername');
+        $usrname = $this->request->post('rUsername', FILTER_SANITIZE_STRING);
         $password = $this->request->post('rPassword');
         
         if( $usrname && $password ){
@@ -108,7 +115,7 @@ class Home extends Resources\Controller {
     
     private function dashboard(){
         
-        if( $post = $this->request->post('post') ){
+        if( $post = $this->request->post('post', FILTER_SANITIZE_STRING) ){
             if( $this->posts->insert($this->userId, $post) )
                 $this->redirect('home?');
         }

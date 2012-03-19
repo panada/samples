@@ -41,6 +41,7 @@
                             <input type="text" name="username">
                                 <label>Password:</label>
                             <input type="password" name="password">
+                            <input type="hidden" name="signature" value="<?php echo $signature;?>">
                             <input type="submit" class="btn btn-primary" name="submit" value="Sign In">
                             </fieldset>
                         </form>

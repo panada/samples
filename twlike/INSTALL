@@ -3,3 +3,5 @@ Download Panada core at http://github.com/panada/panada
 Open and edit index.php file, and adjust the GEAR constant into a path where panada folder located.
 
 Open and edit protected/config/database.php file and adjust to your db parameters.
+
+Restore the sql dump file into your MySQL database server.

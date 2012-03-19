@@ -17,6 +17,7 @@
             </div>
             <label>Password:</label>
             <input type="password" name="password" class="span3">
+            <input type="hidden" name="signature" value="<?php echo $signature;?>">
             <input type="submit" class="btn" value="Sign In" name="submit">
         </form>
         <script type="text/javascript">document.getElementById('username').focus();</script>
@@ -33,6 +34,7 @@
                 </div>
                 <label>Password:</label>
                 <input type="password" name="rPassword" class="span3">
+                <input type="hidden" name="signature" value="<?php echo $signature;?>">
                 <input type="submit" class="btn btn-primary" value="Submit" name="register">
             </fieldset>
         </form>
