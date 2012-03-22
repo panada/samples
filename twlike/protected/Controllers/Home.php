@@ -69,8 +69,9 @@ class Home extends Resources\Controller {
                 $this->redirect($next);
             }
             
-            $data['errorMessage'] = 'Wrong username/password.';
-            $data['loginStyle'] = 'error';
+            $data['errorMessage']   = 'Wrong username/password.';
+            $data['loginStyle']     = 'error';
+            $data['signature']      = $this->requestSignature->generate();
         }
         
         // Register process

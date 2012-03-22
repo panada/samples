@@ -5,6 +5,7 @@
         <div class="hero-unit span5">
             <h1>Hello, world!</h1>
             <p>This is a Twitter like service to run as a Panada sample application, it called Twlike. It provide micro bloging basic feature such as registration for new user, posting a short content, personal profile, follow and unfollow other user and home timeline.</p>
+            <p><a href="https://github.com/panada/samples/tree/master/twlike" target="_blank" class="btn btn-primary btn-large">Download full source code</a></p>
             
         </div>
         <form class="span3 well" action="" method="post">
