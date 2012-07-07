@@ -9,16 +9,17 @@
             
         </div>
         <form class="span3 well" action="" method="post">
+            
             <div class="control-group <?php echo $loginStyle;?>">
             <label>Username:</label>
             <input type="text" name="username" id="username" class="span3">
-            <?php if($errorMessage): ?>
-                <span class="help-inline"><?php echo $errorMessage; ?></span>
-            <?php endif; ?>
-            </div>
+            <?php echo $this->formValidation->errorMessages('username', '<span class="help-inline">', '</span>');?>
+            
             <label>Password:</label>
             <input type="password" name="password" class="span3">
+            <?php echo $this->formValidation->errorMessages('password', '<span class="help-inline">', '</span>');?>
             <input type="hidden" name="signature" value="<?php echo $signature;?>">
+            </div>
             <input type="submit" class="btn" value="Sign In" name="submit">
         </form>
         <script type="text/javascript">document.getElementById('username').focus();</script>
@@ -28,14 +29,15 @@
                 <legend>Register</legend>
                 <div class="control-group <?php echo $loginStyleRegister;?>">
                 <label>Username:</label>
-                <input type="text" name="rUsername" class="span3">
-                <?php if($errorMessageRegister): ?>
-                    <span class="help-inline"><?php echo $errorMessageRegister; ?></span>
-                <?php endif; ?>
-                </div>
+                <input type="text" name="rUsername" class="span3" value="<?php echo $this->formValidation->value('rUsername');?>">
+                <?php echo $this->formValidation->errorMessages('rUsername', '<span class="help-inline">', '</span>');?>
+                
                 <label>Password:</label>
-                <input type="password" name="rPassword" class="span3">
+                <input type="password" name="rPassword" class="span3" value="<?php echo $this->formValidation->value('rPassword');?>">
+                <?php echo $this->formValidation->errorMessages('rPassword', '<span class="help-inline">', '</span>');?>
+                
                 <input type="hidden" name="signature" value="<?php echo $signature;?>">
+                </div>
                 <input type="submit" class="btn btn-primary" value="Submit" name="register">
             </fieldset>
         </form>

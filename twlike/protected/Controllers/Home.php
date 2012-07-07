@@ -15,10 +15,7 @@ class Home extends Resources\Controller {
         
         $this->session          = new Resources\Session;
         $this->request          = new Resources\Request;
-        $this->user             = new Models\Users;
-        $this->connections      = new Models\Connections;
-        $this->posts            = new Models\Posts;
-        $this->requestSignature = new Libraries\RequestSignature;
+        $this->formValidation   = new Models\FormValidation;
     }
     
     public function index(){
@@ -28,6 +25,8 @@ class Home extends Resources\Controller {
             $this->dashboard();
             return;
         }
+        
+        $this->requestSignature = new Libraries\RequestSignature;
         
         // Validate the POST request
         if( $_SERVER['REQUEST_METHOD'] == 'POST' && ! $this->requestSignature->validate( $this->request->post('signature') ) ){
@@ -47,78 +46,46 @@ class Home extends Resources\Controller {
         if( $_SERVER['REQUEST_METHOD'] == 'GET' )
             $data['signature'] = $this->requestSignature->generate();
         
-        // Login process
-        if( $this->request->post('submit') ){
+        
+        if( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
             
-            $usrname = $this->request->post('username', FILTER_SANITIZE_STRING);
+            // by default login process
+            $ruleType = 'signin';
+            $style = 'loginStyle';
             
-            $user = $this->user->getOne( array('username' => $usrname) );
             
-            if( $user && md5($this->request->post('password')) == $user->password ){
+            // Register process
+            if( $this->request->post('register') ) {
                 
-                $this->session->setValue(
-                    array(
-                        'userId' => $user->userId,
-                        'username' => $user->username
-                    )
-                );
-                
-                if( ! $next = $this->request->get('next') )
-                    $next = 'home';
-                
-                $this->redirect($next);
+                $ruleType = 'signup';
+                $style = 'loginStyleRegister';
             }
             
-            $data['errorMessage']   = 'Wrong username/password.';
-            $data['loginStyle']     = 'error';
-            $data['signature']      = $this->requestSignature->generate();
-        }
-        
-        // Register process
-        if( $this->request->post('register') ){
-            if( ! $this->register() ){
-                $data['errorMessageRegister'] = 'Username already exists';
-                $data['loginStyleRegister'] = 'error';
+            if( ! $next = $this->formValidation->validateValues($ruleType) ) {
+                
+                $data[$style] = 'error';
+                $data['signature']  = $this->requestSignature->generate();
+            }
+            else {
+                $this->redirect($next);
             }
         }
         
         $this->output('home', $data);
     }
     
-    private function register(){
-        
-        $usrname = $this->request->post('rUsername', FILTER_SANITIZE_STRING);
-        $password = $this->request->post('rPassword');
-        
-        if( $usrname && $password ){
-            
-            if( ! $user = $this->user->getOne( array('username' => $usrname) ) ){
-                
-                $userId = $this->user->insert( array('username' => $usrname, 'password' => md5($password) ) );
-                
-                $this->connections->addFollowing($userId, $userId);
-                
-                $this->session->setValue(
-                    array(
-                        'userId' => $userId,
-                        'username' => $usrname
-                    )
-                );
-                
-                $this->redirect('home');
-            }
-            
-            return false;
-        }
-        
-        $this->output('signup', $data);
-    }
-    
     private function dashboard(){
         
-        if( $post = $this->request->post('post', FILTER_SANITIZE_STRING) ){
-            if( $this->posts->insert($this->userId, $post) )
-                $this->redirect('home?');
+        $this->connections  = new Models\Connections;
+        $this->posts        = new Models\Posts;
+        
+        if( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+            
+            if( $this->formValidation->validateValues('post') ) {
+                
+                if( $this->posts->insert($this->userId, $post) )
+                    $this->redirect('home?');
+            }
         }
         
         $data['timeline']   = $this->posts->getTimeline($this->userId);

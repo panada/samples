@@ -8,6 +8,7 @@
                     <legend>What's in your mind?</legend>
                     <div class="control-group">
                     <textarea class="input-xlarge" id="textarea" name="post" rows="3" placeholder="Write your post..."></textarea>
+                    <?php echo $this->formValidation->errorMessages('post', '<span class="help-inline">', '</span>');?>
                     </div>
                     <div class="control-group submit-post">
                         <input type="submit" class="btn btn-primary" value="Submit">
