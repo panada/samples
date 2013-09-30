@@ -83,7 +83,7 @@ class Home extends Resources\Controller {
             
             if( $this->formValidation->validateValues('post') ) {
                 
-                if( $this->posts->insert($this->userId, $post) )
+                if( $this->posts->insert($this->userId, $this->formValidation->value('post')) )
                     $this->redirect('home?');
             }
         }

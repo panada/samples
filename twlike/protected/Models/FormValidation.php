@@ -70,7 +70,8 @@ class FormValidation extends Resources\Validation {
                 'post' => array(
                     'rules' => array(
                         'required',
-                        'min' => 140,
+                        'max' => 140,
+                        'min' => 3
                     ),
                     'label' => 'Post',
                     'filter' => array('trim', array($this, 'sanitizeString') )
